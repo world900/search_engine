@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>나만의 홈</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #f2f4f6;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: #222;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: #03c75a;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    .header-logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    .header-nav a {
+      color: rgba(255,255,255,0.88);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+
+    .header-nav a:hover { color: #fff; }
+
+    /* ── HERO / SEARCH ── */
+    .hero {
+      background: #fff;
+      padding: 36px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-bottom: 1px solid #e5e8eb;
+    }
+
+    .logo-main {
+      font-size: 42px;
+      font-weight: 700;
+      color: #03c75a;
+      letter-spacing: -1px;
+      margin-bottom: 22px;
+      line-height: 1;
+    }
+
+    .clock-row {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .clock-row strong {
+      font-weight: 500;
+      color: #444;
+    }
+
+    /* Search */
+    .search-wrap {
+      width: 100%;
+      max-width: 580px;
+    }
+
+    .engine-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #e5e8eb;
+    }
+
+    .engine-tab {
+      padding: 7px 18px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: #888;
+      cursor: pointer;
+      font-weight: 400;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .engine-tab:hover { color: #03c75a; }
+
+    .engine-tab.active {
+      color: #03c75a;
+      font-weight: 700;
+      border-bottom-color: #03c75a;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      border: 2px solid #03c75a;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: #222;
+      padding: 12px 16px;
+      outline: none;
+    }
+
+    .search-input::placeholder { color: #bbb; }
+
+    .search-btn {
+      width: 56px;
+      height: 48px;
+      border: none;
+      background: #03c75a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+      font-size: 20px;
+    }
+
+    .search-btn:hover { background: #02b350; }
+
+    /* ── MAIN GRID ── */
+    .main {
+      max-width: 1060px;
+      margin: 20px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
+    }
+
+    .col-left { display: flex; flex-direction: column; gap: 16px; }
+    .col-right { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid #e5e8eb;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid #f2f4f6;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #222;
+    }
+
+    .card-more {
+      font-size: 12px;
+      color: #888;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .card-more:hover { color: #03c75a; }
+
+    /* Shortcuts */
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0;
+    }
+
+    .shortcut {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      text-decoration: none;
+      transition: background 0.12s;
+      border-right: 1px solid #f2f4f6;
+    }
+
+    .shortcut:nth-child(6n) { border-right: none; }
+    .shortcut:hover { background: #f8fff9; }
+
+    .shortcut-icon-wrap {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .shortcut-label {
+      font-size: 11px;
+      color: #555;
+      font-weight: 400;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    /* News list */
+    .news-list { padding: 4px 0; }
+
+    .news-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 18px;
+      border-bottom: 1px solid #f2f4f6;
+      cursor: pointer;
+      transition: background 0.12s;
+      text-decoration: none;
+    }
+
+    .news-item:last-child { border-bottom: none; }
+    .news-item:hover { background: #f8fff9; }
+
+    .news-rank {
+      font-size: 14px;
+      font-weight: 700;
+      color: #03c75a;
+      min-width: 22px;
+      padding-top: 1px;
+    }
+
+    .news-rank.high { color: #ff4757; }
+
+    .news-text {
+      font-size: 13px;
+      color: #333;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .news-press {
+      font-size: 11px;
+      color: #bbb;
+      margin-top: 2px;
+    }
+
+    /* Weather card */
+    .weather-body {
+      padding: 16px 18px;
+    }
+
+    .weather-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .weather-icon { font-size: 40px; }
+
+    .weather-temp {
+      font-size: 34px;
+      font-weight: 300;
+      color: #222;
+    }
+
+    .weather-temp sup { font-size: 16px; vertical-align: super; }
+
+    .weather-info {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.8;
+    }
+
+    .weather-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .weather-mini {
+      background: #f8f9fa;
+      border-radius: 4px;
+      padding: 8px 10px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .weather-mini .label { color: #aaa; margin-bottom: 2px; }
+    .weather-mini .val { font-weight: 500; color: #444; }
+
+    /* Stock */
+    .stock-body { padding: 8px 0; }
+
+    .stock-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 18px;
+      border-bottom: 1px solid #f2f4f6;
+      font-size: 13px;
+    }
+
+    .stock-item:last-child { border-bottom: none; }
+    .stock-name { color: #333; font-weight: 400; }
+    .stock-val { font-weight: 500; color: #222; }
+    .stock-change { font-size: 12px; }
+    .up { color: #ff4757; }
+    .down { color: #1e90ff; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .main { grid-template-columns: 1fr; }
+      .col-right { display: none; }
+      .shortcuts-grid { grid-template-columns: repeat(4, 1fr); }
+      .shortcut:nth-child(4n) { border-right: none; }
+      .shortcut:nth-child(6n) { border-right: 1px solid #f2f4f6; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-logo">NAVER</div>
+    <nav class="header-nav">
+      <a href="https://mail.naver.com" target="_blank">메일</a>
+      <a href="https://cafe.naver.com" target="_blank">카페</a>
+      <a href="https://blog.naver.com" target="_blank">블로그</a>
+      <a href="https://shopping.naver.com" target="_blank">쇼핑</a>
+      <a href="https://map.naver.com" target="_blank">지도</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="logo-main">NAVER</div>
+    <div class="clock-row" id="clockRow">로딩 중...</div>
+    <div class="search-wrap">
+      <div class="engine-tabs">
+        <button class="engine-tab active" onclick="setEngine('naver',this)">통합검색</button>
+        <button class="engine-tab" onclick="setEngine('google',this)">Google</button>
+        <button class="engine-tab" onclick="setEngine('youtube',this)">YouTube</button>
+        <button class="engine-tab" onclick="setEngine('claude',this)">Claude AI</button>
+      </div>
+      <div class="search-box">
+        <input class="search-input" id="searchInput" type="text" placeholder="검색어를 입력해 주세요" />
+        <button class="search-btn" onclick="doSearch()" aria-label="검색">🔍</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="col-left">
+
+      <!-- Shortcuts -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">바로가기</span>
+        </div>
+        <div class="shortcuts-grid">
+          <a class="shortcut" href="https://mail.naver.com" target="_blank">
+            <div class="shortcut-icon-wrap" style="background:#e8f5e9">📧</div>
+            <span class="shortcut-label">네이버<br>메일</span>
+          </a>
+          <a class="shortcut" href="https://cafe.naver.com" target="_blank">
+            <div class="shortcut-icon-wrap" style="background:#e3f2fd">☕</div>
+            <span class="shortcut-label">네이버<br>카페</span>
+          </a>
+          <a class="shortcut" href="https://blog.naver.com" target="_blank">
+            <div class="shortcut-icon-wrap" style="background:#fce4ec">✏️</div>
+            <span class="shortcut-label">네이버<br>블로그</span>
+          </a>
+          <a class="shortcut" href="https://shopping.naver.com" target="_blank">
+            <div class="shortcut-icon-wrap" style="background:#fff3e0">🛍️</div>
+            <span class="shortcut-label">네이버<br>쇼핑</span>
+          </a>
+          <a class="shortcut" href="https://youtube.com" target="_blank">
+            <div class="shortcut-icon-wrap" style="background:#ffebee">▶️</div>
+            <span class="shortcut-label">YouTube</span>
+          </a>
+          <a class="shortcut" href="https://github.com" target="_blank">
+            <div class="shortcut-icon-wrap" style="background:#ede7f6">🐙</div>
+            <span class="shortcut-label">GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- News -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📰 실시간 주요뉴스</span>
+          <a class="card-more" href="https://news.naver.com" target="_blank">더보기 &rsaquo;</a>
+        </div>
+        <div class="news-list">
+          <a class="news-item" href="https://news.naver.com" target="_blank">
+            <span class="news-rank high">1</span>
+            <div>
+              <div class="news-text">코스피, 외국인 순매수에 2,650선 회복… 반도체株 강세</div>
+              <div class="news-press">연합뉴스 · 방금 전</div>
+            </div>
+          </a>
+          <a class="news-item" href="https://news.naver.com" target="_blank">
+            <span class="news-rank high">2</span>
+            <div>
+              <div class="news-text">정부, 전기요금 인상 여부 이달 말 최종 결정 예정</div>
+              <div class="news-press">조선일보 · 32분 전</div>
+            </div>
+          </a>
+          <a class="news-item" href="https://news.naver.com" target="_blank">
+            <span class="news-rank">3</span>
+            <div>
+              <div class="news-text">국내 기업 AI 투자 급증… 작년 대비 230% 증가</div>
+              <div class="news-press">한국경제 · 1시간 전</div>
+            </div>
+          </a>
+          <a class="news-item" href="https://news.naver.com" target="_blank">
+            <span class="news-rank">4</span>
+            <div>
+              <div class="news-text">주말 전국 맑음, 일교차 크게 벌어져 건강 주의</div>
+              <div class="news-press">기상청 · 2시간 전</div>
+            </div>
+          </a>
+          <a class="news-item" href="https://news.naver.com" target="_blank">
+            <span class="news-rank">5</span>
+            <div>
+              <div class="news-text">KBO 리그 주말 빅매치, 오늘 오후 5시 시작</div>
+              <div class="news-press">스포츠서울 · 3시간 전</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COL -->
+    <div class="col-right">
+
+      <!-- Weather -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🌤 날씨 · 인천</span>
+          <a class="card-more" href="https://weather.naver.com" target="_blank">더보기 &rsaquo;</a>
+        </div>
+        <div class="weather-body">
+          <div class="weather-main">
+            <div class="weather-icon">⛅</div>
+            <div>
+              <div class="weather-temp">21<sup>°C</sup></div>
+              <div class="weather-info">구름 조금<br>체감 19°C</div>
+            </div>
+          </div>
+          <div class="weather-row">
+            <div class="weather-mini">
+              <div class="label">최저 / 최고</div>
+              <div class="val">14° / 24°</div>
+            </div>
+            <div class="weather-mini">
+              <div class="label">강수확률</div>
+              <div class="val">10%</div>
+            </div>
+            <div class="weather-mini">
+              <div class="label">습도</div>
+              <div class="val">58%</div>
+            </div>
+            <div class="weather-mini">
+              <div class="label">미세먼지</div>
+              <div class="val" style="color:#03c75a">좋음</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📈 증권</span>
+          <a class="card-more" href="https://finance.naver.com" target="_blank">더보기 &rsaquo;</a>
+        </div>
+        <div class="stock-body">
+          <div class="stock-item">
+            <span class="stock-name">코스피</span>
+            <div style="text-align:right">
+              <div class="stock-val">2,651.32</div>
+              <div class="stock-change up">▲ 18.54 (0.70%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <span class="stock-name">코스닥</span>
+            <div style="text-align:right">
+              <div class="stock-val">741.08</div>
+              <div class="stock-change down">▼ 3.21 (0.43%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <span class="stock-name">삼성전자</span>
+            <div style="text-align:right">
+              <div class="stock-val">73,400</div>
+              <div class="stock-change up">▲ 800 (1.10%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <span class="stock-name">원/달러</span>
+            <div style="text-align:right">
+              <div class="stock-val">1,362.50</div>
+              <div class="stock-change down">▼ 2.30</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">© 2026 나만의 홈페이지 · Claude로 제작</div>
+
+  <script>
+    const engines = {
+      naver:   'https://search.naver.com/search.naver?query=',
+      google:  'https://www.google.com/search?q=',
+      youtube: 'https://www.youtube.com/results?search_query=',
+      claude:  'https://claude.ai/new?q='
+    };
+    let currentEngine = 'naver';
+
+    function setEngine(name, btn) {
+      currentEngine = name;
+      document.querySelectorAll('.engine-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function doSearch() {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) return;
+      window.open(engines[currentEngine] + encodeURIComponent(q), '_blank');
+    }
+
+    document.getElementById('searchInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doSearch();
+    });
+
+    const DAYS = ['일','월','화','수','목','금','토'];
+    function tick() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      document.getElementById('clockRow').innerHTML =
+        `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} <strong>(${DAYS[now.getDay()]})</strong> ${h}:${m}:${s}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
